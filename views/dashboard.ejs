@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <link href="/output.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-6">
+  <div class="bg-gray-800 rounded-2xl p-6 w-full max-w-md shadow-lg">
+    <h1 class="text-2xl font-semibold mb-4">Dashboard</h1>
+    <p class="text-sm mb-4">Welcome, <%= user.first_name %>!</p>
+    <form action="/log-out" method="POST">
+      <button class="w-full rounded-lg p-2 bg-blue-600 hover:bg-blue-700">Log Out</button>
+    </form>
+  </div>
+</body>
+</html>

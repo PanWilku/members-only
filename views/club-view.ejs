@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= club?.name ? club.name + " · Club" : "Club" %></title>
+  <link href="/output.css" rel="stylesheet" />
+</head>
+<body class="flex bg-gray-900 text-white min-h-screen p-6 justify-center items-center max-w-dvw">
+  <% if (user && user.first_name) { %>
+    <div class="flex w-full gap-6">
+      
+      <!-- Left: Nav / Shortcuts -->
+      <div class="flex w-1/3 flex-col gap-6 pr-16">
+        <div class="flex w-full bg-gray-800 rounded-2xl p-6 shadow-lg flex-col">
+          <h2 class="text-xl font-semibold mb-4">Navigation</h2>
+          <div class="flex flex-col gap-3">
+            <a href="/dashboard" class="rounded-lg p-2 bg-gray-700 hover:bg-gray-600 text-center">Back to Dashboard</a>
+            <a href="/clubs" class="rounded-lg p-2 bg-gray-700 hover:bg-gray-600 text-center">View All Clubs</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle: Club View -->
+      <main class="flex w-1/3 flex-col gap-6 justify-center items-center">
+        <div class="flex w-4/5 bg-gray-800 rounded-2xl p-6 shadow-lg flex-col">
+          <h1 class="text-2xl font-semibold mb-2"><%= club.name %></h1>
+          <p class="text-sm text-gray-300 mb-4"><%= club.description %></p>
+            CREATE A NEW TABLE FOR CLUB MEMBERSHIPS
+          <!-- Join button -->
+          <% if (!club.is_member && user) { %>
+            <!-- If your join route expects POST, prefer a form. If it’s GET, use an <a>. -->
+            <form action="/join-club/<%= club.id %>" method="POST" class="mt-2">
+              <button class="w-full rounded-lg p-3 bg-blue-600 hover:bg-blue-700">
+                Join Club
+              </button>
+            </form>
+          <% } else { %>
+            <div class="w-full rounded-lg p-3 bg-green-700/40 border border-green-600 text-center">
+              You are a member of this club.
+            </div>
+          <% } %>
+
+          <!-- (Optional) Owner-only actions -->
+          <% if (club.is_owner) { %>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <a href="/club/<%= club.id %>/edit" class="rounded-lg p-2 bg-gray-700 hover:bg-gray-600 text-center">Edit Club</a>
+              <form action="/club/<%= club.id %>?_method=DELETE" method="POST">
+                <button class="w-full rounded-lg p-2 bg-red-600 hover:bg-red-700">Delete Club</button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      </main>
+
+      <!-- Right: Extras (optional) -->
+      <aside class="flex w-1/3 flex-col gap-6">
+        <div class="flex w-full bg-gray-800 rounded-2xl p-6 shadow-lg flex-col">
+          <h2 class="text-xl font-semibold mb-4">Club Stats</h2>
+          <ul class="text-sm text-gray-300 space-y-2">
+            <li>Members: <span class="text-gray-200 font-medium"><%= club.members_count || 0 %></span></li>
+            <li>Messages: <span class="text-gray-200 font-medium"><%= club.messages_count || 0 %></span></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  <% } else { %>
+    <div class="max-w-md mx-auto bg-gray-800 rounded-2xl p-6 w-full shadow-lg">
+      <h1 class="text-2xl font-semibold mb-4">Club</h1>
+      <p class="text-sm mb-4">You are not logged in.</p>
+      <a href="/" class="block w-full rounded-lg p-2 bg-blue-600 hover:bg-blue-700 text-center">
+        Go back to Home
+      </a>
+    </div>
+  <% } %>
+</body>
+</html>

@@ -5,6 +5,9 @@ const indexRouter = require('./routes/indexRoute').indexRouter;
 const signUpRouter = require('./routes/sign-upRoute').signUpRouter;
 const { dashboardRouter } = require('./routes/dashboardRoute');
 const { authRouter } = require('./routes/authRoute');
+const { createClubRouter } = require('./routes/createClubRoute');
+const { logInRouter } = require('./routes/log-inRoute');
+const { viewClubRouter } = require('./routes/viewClubRoute');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const passport = require('passport');
@@ -50,23 +53,14 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 
-app.get('/', indexRouter);
-app.get('/sign-up', signUpRouter);
-app.post('/sign-up', signUpRouter);
-app.get('/dashboard', dashboardRouter);
+app.use('/', indexRouter);
+app.use('/sign-up', signUpRouter);
+app.use('/dashboard', dashboardRouter);
+app.use('/create-club', createClubRouter);
+app.use('/log-in', logInRouter);
+app.use('/club/', viewClubRouter)
+
 app.use(authRouter);
-
-
-
-app.use((req, res, next) => {
-  const before = JSON.stringify(req.session);
-  res.on('finish', () => {
-    const after = JSON.stringify(req.session);
-    console.log('SESSION before:', before);
-    console.log('SESSION after :', after);
-  });
-  next();
-});
 
 
 //write an error handler middleware

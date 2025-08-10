@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Join the Club</title>
+  <link href="/output.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-6">
+  <div class="bg-gray-800 rounded-2xl p-6 w-full max-w-md shadow-lg">
+    <h1 class="text-2xl font-semibold mb-4">Join the Club</h1>
+    <p class="text-sm mb-4">Enter the secret passcode to join a club.</p>
+
+    <form action="/create-club/own" method="POST" class="space-y-4">
+        <% if (Array.isArray(errors) && errors.length > 0) { %>
+        <div class="mb-4 text-sm text-red-400">
+        <p>
+            Sorry <%= user.first_name %>, there was an error creating your club.
+            Error: <%= errors[0].msg %>
+        </p>
+        </div>
+        <% } %>
+        <div>
+            <label for="clubName" class="block text-sm mb-2">Club Name</label>
+            <input
+                id="clubName"
+                name="clubName"
+                type="text"
+                required
+                class="w-full rounded-lg p-2 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter club name"
+            />
+        </div>
+        <div>
+            <label for="clubDescription" class="block text-sm mb-2">Club Description</label>
+            <textarea
+                id="clubDescription"
+                name="clubDescription"
+                required
+                class="w-full rounded-lg p-2 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter club description"
+            ></textarea>
+        </div>
+        <div>
+            <label for="passcode" class="block text-sm mb-2">Secret Passcode</label>
+            <input
+                id="passcode"
+                name="passcode"
+                type="password"
+                required
+                class="w-full rounded-lg p-2 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter passcode"
+            />
+        </div>
+
+        <button type="submit" class="w-full cursor-pointer rounded-lg p-2 bg-blue-600 hover:bg-blue-700">
+            Create Club
+        </button>
+    </form>
+
+    <div class="mt-4">
+      <a href="/dashboard" class="block w-full rounded-lg p-2 bg-green-600 hover:bg-green-700 text-center">
+        Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+
+
+
+
+
+</body>
+</html>

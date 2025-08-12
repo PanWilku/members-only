@@ -33,6 +33,11 @@ const handleCreateClub = async (req, res, next) => {
 
     await db.query('INSERT INTO clubs (name, description, passcode, owner_id) VALUES ($1, $2, $3, $4)', [clubName, clubDescription, hashedPasscode, req.user.id]);
 
+    const { rows } = await db.query('SELECT id FROM clubs WHERE name = $1 AND owner_id = $2', [clubName, req.user.id]);
+    const clubId = rows[0].id;
+
+    await db.query('INSERT INTO club_memberships (user_id, club_id, role, joined_at) VALUES ($1, $2, $3, NOW())', [req.user.id, clubId, 'owner']);
+
     res.redirect('/dashboard');
 }
 

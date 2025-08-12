@@ -5,13 +5,13 @@ const db = require('../db/pool'); // your pg Pool
 const { signUpValidation } = require('../utils/signUpValidation')
 const { validationResult } = require('express-validator');
 
-router.get('/sign-up', (req, res) => {
+router.get('/', (req, res) => {
 
   res.render('sign-up', { errors: [], old: {} });
 
 });
 
-router.post('/sign-up', signUpValidation, async (req, res) => {
+router.post('/', signUpValidation, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.render('sign-up', { errors: errors.array(), old: req.body });

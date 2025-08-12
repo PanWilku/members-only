@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect('/log-in');
     }
-    res.render('create-club', { user: req.user });
+    res.render('create-club', { user: req.user, error: null });
 });
 
 

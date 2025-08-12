@@ -24,9 +24,14 @@
                       <p class="text-xs text-gray-400 mt-2">Created by: <%= club.first_name %></p>
                   </div>
                   <div class="flex w-1/4 justify-end items-center gap-4">
-                    <a href="/join-club/<%= club.id %>" class="flex w-fit p-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-center">
+                    <% if (club.is_member) { %>
+                      <span class="text-green-500">Joined</span>
+                    <% } else { %>
+                    <a href="/club/<%= club.id %>" class="flex w-fit p-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-center">
                       Join Club
                     </a>
+                    <% } %>
+
                     <a href="/club/<%= club.id %>" class="flex w-fit p-4 rounded-lg bg-gray-600 hover:bg-gray-700 text-center">
                       View Club
                     </a>
@@ -44,7 +49,7 @@
           <h1 class="text-2xl font-semibold mb-4">Dashboard</h1>
           <p class="text-sm mb-4">Welcome, <%= user.first_name %>!</p>
           <form action="/log-out" method="POST">
-            <button class="w-full rounded-lg p-2 bg-blue-600 hover:bg-blue-700">Log Out</button>
+            <button class="w-full rounded-lg p-2 bg-blue-600 hover:bg-blue-700 cursor-pointer">Log Out</button>
           </form>
           <div class="mt-4">
             <a href="/create-club" class="block w-full rounded-lg p-2 bg-green-600 hover:bg-green-700 text-center">
@@ -56,7 +61,8 @@
 
       <!-- Right: Empty space -->
       <div class="flex w-1/3 flex-col gap-6">
-        <div class="flex w-full flex-col"></div>
+        <div class="flex w-full flex-col">
+        </div>
       </div>
     </div>
   <% } else { %>

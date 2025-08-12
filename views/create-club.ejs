@@ -11,8 +11,11 @@
     <p class="text-sm mb-4">Enter the secret passcode to join a club.</p>
 
 
-    <form action="/create-club" method="POST" class="space-y-4">
+    <form action="/join-club/code" method="POST" class="space-y-4">
         <div>
+            <% if (error) { %>
+            <p class="text-red-500 text-sm mb-2"><%= error %></p>
+            <% } %>
             <label for="passcode" class="block text-sm mb-2">Secret Passcode</label>
             <input
                 id="passcode"

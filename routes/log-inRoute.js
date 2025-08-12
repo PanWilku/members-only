@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect('/dashboard');
     }
-    res.render('log-in', { user: req.user });
+    res.render('log-in', { user: req.user, error: null });
 });
 
 

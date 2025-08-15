@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= topicName || "Topic" %></title>
+  <link href="/output.css" rel="stylesheet" />
+</head>
+<body class="flex bg-gray-900 text-white min-h-screen p-6 justify-center items-center max-w-dvw">
+  <div class="flex w-full gap-6">
+    <!-- Left: spacer to keep 3-col layout -->
+    <div class="flex w-1/4 pr-16"></div>
+
+    <!-- Middle: centered card -->
+    <main class="flex w-1/2 flex-col items-center justify-start">
+      <div class="w-full bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <!-- Topic header -->
+        <div class="mb-6">
+          <h1 class="text-2xl font-semibold"><%= topicName || "Topic" %></h1>
+        </div>
+
+        <!-- Error banner (if any) -->
+        <% if (typeof error === 'string' && error) { %>
+          <div class="mb-6 rounded-xl border border-red-900/50 bg-red-950/40 px-4 py-3 text-red-200">
+            <%= error %>
+          </div>
+        <% } %>
+
+          <div class="w-full mb-6 overflow-y-auto max-h-[80vh]">
+            <ol class="space-y-4">
+            <% messages.forEach(message => { %>
+                <li class="rounded-xl border border-gray-700 bg-gray-900/50 p-4">
+                <div class="flex text-sm font-semibold text-gray-200">
+                    <div class="flex w-full"><%= message.name %></div>
+                    <% if (!(message.canEdit && Number(message.id) === Number(messageId))) { %>
+                    <div class="flex justify-end">
+                        <a href="/topic/<%= clubId %>/<%= topicId %>/edit/<%= message.id %>" 
+                        class="text-blue-500 hover:underline cursor-pointer">
+                        Edit
+                        </a>
+                    </div>
+                    <% } %>
+                </div>
+
+                    <div class="flex w-full">
+                        <div class="text-xs text-gray-500 mb-2 mr-4">
+                            Posted on <%= new Date(message.created_at).toLocaleString('en-GB', { hour12: false }) %>
+                        </div>
+                        <div class="text-xs text-gray-500 mb-2">
+                            <% if (message.updated_at) { %>
+                                Edited on <%= new Date(message.updated_at).toLocaleString('en-GB', { hour12: false }) %>
+                            <% } %>
+                        </div>
+                    </div>
+
+                <div class="text-gray-100">
+                    <% if (message.canEdit && Number(message.id) === Number(messageId)) { %>
+                    <form action="/topic/<%= clubId %>/<%= topicId %>/edit/<%= message.id %>/submit" 
+                            method="POST" 
+                            class="space-y-3">
+                        <textarea name="message" 
+                                rows="3" 
+                                minlength="5"
+                                class="w-full p-2 border border-gray-700 rounded-md" 
+                                placeholder="Edit your message..."><%= message.message %></textarea>
+                        <div class="flex justify-end">
+                        <button type="submit" 
+                                class="text-green-500 hover:underline cursor-pointer">
+                            Save
+                        </button>
+                        </div>
+                    </form>
+                    <% } else { %>
+                    <%= message.message %>
+                    <% } %>
+                </div>
+                </li>
+            <% }) %>
+            </ol>
+
+          </div>
+    </main>
+
+    <div class="flex w-1/4"></div>
+  </div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 const {Router} = require('express');
 const db = require('../db/pool');
-
 const router = Router();
 
 
@@ -61,24 +60,6 @@ router.get('/:id', async (req, res, next) => {
 
 
 
-router.get('/:id/create-topic', async (req, res, next) => {
-  const clubId = Number(req.params.id); // basic guard
-  if (!Number.isInteger(clubId)) return res.status(400).send('Invalid club id');
-    console.log('Accessing create-topic route for club ID:', clubId);
-  try {
-    const { rows } = await db.query(
-      'SELECT * FROM clubs WHERE id = $1',
-      [clubId]
-    );
-
-    const club = rows[0];
-    if (!club) return res.status(404).send('Club not found');
-
-    res.render('create-topic', { user: req.user, club, error: null, formData: null });
-  } catch (error) {
-    next(error);
-  }
-});
 
 
 

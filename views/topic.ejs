@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= topicName || "Topic" %></title>
+  <link href="/output.css" rel="stylesheet" />
+</head>
+<body class="flex bg-gray-900 text-white min-h-screen p-6 justify-center items-center max-w-dvw">
+  <div class="flex w-full gap-6">
+    <!-- Left: spacer to keep 3-col layout -->
+    <div class="flex items-center w-1/4 pr-16">
+        <div>
+            <button class="rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-medium cursor-pointer">
+                <a href="/club/<%= clubId %>">Back to the club</a>
+            </button>
+        </div>
+    </div>
+
+    <!-- Middle: centered card -->
+    <main class="flex w-1/2 flex-col items-center justify-start">
+      <div class="w-full bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <!-- Topic header -->
+        <div class="mb-6">
+          <h1 class="text-2xl font-semibold"><%= topicName || "Topic" %></h1>
+        </div>
+
+        <!-- Error banner (if any) -->
+        <% if (typeof error === 'string' && error) { %>
+          <div class="mb-6 rounded-xl border border-red-900/50 bg-red-950/40 px-4 py-3 text-red-200">
+            <%= error %>
+          </div>
+        <% } %>
+
+          <div class="w-full mb-6 overflow-y-auto max-h-[80vh]">
+              <ol class="space-y-4">
+                <% messages.forEach(message => { %>
+                  <li class="rounded-xl border border-gray-700 bg-gray-900/50 p-4">
+                    <div class="flex text-sm font-semibold text-gray-200">
+                        <div class="flex w-full "><%= message.name %></div>
+                        <% if (message.canEdit) { %>
+                            <div class="flex justify-end">
+                                <a href="/topic/<%= clubId %>/<%= topicId %>/edit/<%= message.id %>" class="text-blue-500 hover:underline cursor-pointer">Edit</a>
+                            </div>
+                        <% } %>
+
+                    </div>
+                    <div class="flex w-full">
+                        <div class="text-xs text-gray-500 mb-2 mr-4">
+                            Posted on <%= new Date(message.created_at).toLocaleString('en-GB', { hour12: false }) %>
+                        </div>
+                        <div class="text-xs text-gray-500 mb-2">
+                            <% if (message.updated_at) { %>
+                                Edited on <%= new Date(message.updated_at).toLocaleString('en-GB', { hour12: false }) %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="text-gray-100">
+                      <%= message.message %>
+                    </div>
+                  </li>
+                <% }) %>
+              </ol>
+          </div>
+
+        <% if (is_member) { %>
+          <div class="mt-6 rounded-xl border border-gray-700 bg-gray-900/40 p-4">
+            <h2 class="text-lg font-semibold mb-3">Reply</h2>
+            <form action="/topic/<%= clubId %>/<%= topicId %>" method="POST" class="space-y-3">
+              <div>
+                <label for="message" class="block text-sm text-gray-300 mb-1">Message</label>
+                <textarea id="message" name="message" rows="4" required
+                          class="w-full rounded-lg bg-gray-950/70 border border-gray-700 px-3 py-2 outline-none focus:border-blue-600"></textarea>
+              </div>
+              <div class="flex justify-end">
+                <button type="submit" class="rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-medium cursor-pointer">
+                  Post reply
+                </button>
+              </div>
+            </form>
+        </div>
+        <% } else { %>
+          <p class="mt-6 text-sm text-gray-400">
+            You must be a club member to post replies.
+          </p>
+          <a href="/dashbaord" class="text-blue-500 hover:underline">Dashbaord</a>
+        <% } %>
+      </div>
+    </main>
+
+    <div class="flex w-1/4"></div>
+  </div>
+</body>
+</html>

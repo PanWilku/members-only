@@ -11,6 +11,9 @@ const { viewClubRouter } = require('./routes/viewClubRoute');
 const { joinClubRouter } = require('./routes/joinClubRoute');
 const { leaveClubRouter } = require('./routes/leaveClubRoute');
 const { deleteClubRouter } = require('./routes/deleteClubRoute');
+const { createTopicRouter } = require('./routes/createTopicRoute');
+const { getTopicRouter } = require('./routes/getTopicRoute');
+const { editMessageRouter } = require('./routes/editMessageRoute');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const passport = require('passport');
@@ -61,10 +64,14 @@ app.use('/sign-up', signUpRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/create-club', createClubRouter);
 app.use('/log-in', logInRouter);
-app.use('/club/', viewClubRouter)
+app.use('/club', viewClubRouter)
+app.use('/club', createTopicRouter);
+app.use('/topic', getTopicRouter);
 app.use('/join-club', joinClubRouter);
 app.use('/leave-club', leaveClubRouter)
 app.use('/delete-club', deleteClubRouter);
+app.use('/topic', editMessageRouter);
+
 
 app.use(authRouter);
 

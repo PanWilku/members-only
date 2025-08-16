@@ -14,6 +14,7 @@ const { deleteClubRouter } = require('./routes/deleteClubRoute');
 const { createTopicRouter } = require('./routes/createTopicRoute');
 const { getTopicRouter } = require('./routes/getTopicRoute');
 const { editMessageRouter } = require('./routes/editMessageRoute');
+const { deleteMessageRouter } = require('./routes/deleteMessageRoute');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const passport = require('passport');
@@ -71,6 +72,7 @@ app.use('/join-club', joinClubRouter);
 app.use('/leave-club', leaveClubRouter)
 app.use('/delete-club', deleteClubRouter);
 app.use('/topic', editMessageRouter);
+app.use('/topic', deleteMessageRouter);
 
 
 app.use(authRouter);

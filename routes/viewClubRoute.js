@@ -28,6 +28,32 @@ router.get('/:id', async (req, res, next) => {
     const club = rows[0];
     if (!club) next(new Error('Club not found'));
 
+
+    //get number of messages from club_topics
+    const { rows: topicCountRows } = await db.query(
+      'SELECT id FROM club_topics WHERE club_id = $1', [clubId]
+    );
+    let totalMessages = 0;
+    for(const topic of topicCountRows) {
+      const { rows: messageCountRows } = await db.query(
+        'SELECT COUNT(*) FROM club_topic_messages WHERE topic_id = $1', [topic.id]
+      );
+      totalMessages += Number(messageCountRows[0].count);
+    }
+
+    club.messages_count = totalMessages;
+
+
+
+
+    //get number of members in the club
+    const { rows: memberCountRows } = await db.query(
+      'SELECT COUNT(*) FROM club_memberships WHERE club_id = $1', [clubId]
+    );
+    club.members_count = Number(memberCountRows[0].count);
+
+
+
     const isMember = await db.query(
       'SELECT 1 FROM club_memberships WHERE club_id = $1 AND user_id = $2',
       [clubId, req.user.id]

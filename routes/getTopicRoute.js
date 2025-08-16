@@ -26,7 +26,21 @@ router.get('/:id/:topicId', async (req, res, next) => {
         // add canEdit property to each message
         message.canEdit = message.author_id === req.user.id;
     }
-    
+
+    // get topic author id
+    const { rows: topicAuthorRows } = await db.query(
+        'SELECT author_id FROM club_topics WHERE id = $1',
+        [topicId]
+    );
+    const isAuthor = topicAuthorRows[0]?.author_id === req.user.id;
+
+    // check is admin
+    const { rows: isAdminRows } = await db.query(
+      'SELECT 1 FROM club_memberships WHERE club_id = $1 AND user_id = $2 AND role = $3',
+      [clubId, req.user.id, 'owner']
+    );
+    const isAdmin = isAdminRows.length > 0;
+
 
     const { rows: topicRows } = await db.query('SELECT title FROM club_topics WHERE id = $1', [topicId]);
     // get all messages for the topic
@@ -38,7 +52,8 @@ router.get('/:id/:topicId', async (req, res, next) => {
     );
     const is_member = isMember.rowCount > 0;
 
-    res.render('topic', { user: req.user, clubId, topicId, messages, topicName, error: null, is_member});
+    res.render('topic', { user: req.user, clubId, topicId, messages, topicName,
+        error: null, is_member, isAdmin, isAuthor });
   } catch (error) {
     next(error);
   }
@@ -61,7 +76,7 @@ router.post('/:id/:topicId', async (req, res, next) => {
     message = normalizeText(message);
 
    try {
-        await db.query('INSERT INTO club_topic_messages (topic_id, author_id, message, created_at) VALUES ($1, $2, $3, NOW())', [topicId, userId, message]);
+        await db.query('INSERT INTO club_topic_messages (topic_id, author_id, message, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NULL)', [topicId, userId, message]);
         res.redirect(`/topic/${clubId}/${topicId}`);
    } catch (error) {
        next(error);

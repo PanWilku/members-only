@@ -1,14 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link href="/output.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <link href="/output.css" rel="stylesheet" />
 </head>
-<body>
-    <h1>Welcome to the <%= title %></h1>
-    <a href="/sign-up"><button>Register</button></a>
-    <a href="/log-in"><button>Login</button></a>
+<body class="flex bg-gray-900 text-white min-h-screen p-6 justify-center items-center max-w-dvw">
+  <div class="flex w-full gap-6">
+    <!-- Left spacer (keep your 3-col feel) -->
+    <div class="flex w-1/4 pr-16"></div>
+
+    <!-- Middle: centered card -->
+    <main class="flex w-1/2 flex-col items-center justify-start">
+      <div class="w-full bg-gray-800 rounded-2xl p-6 shadow-lg">
+        <!-- Header row -->
+        <div class="flex w-full mb-6 items-center">
+          <h1 class="text-2xl font-semibold">Welcome to <%= title %></h1>
+          <div class="flex w-full justify-end gap-3">
+            <a href="/log-in" class="rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-medium cursor-pointer">
+              Log in
+            </a>
+            <a href="/sign-up" class="rounded-lg bg-gray-700 hover:bg-gray-600 px-4 py-2 font-medium cursor-pointer">
+              Register
+            </a>
+          </div>
+        </div>
+
+        <!-- Optional error banner -->
+        <% if (typeof error === 'string' && error) { %>
+          <div class="mb-6 rounded-xl border border-red-900/50 bg-red-950/40 px-4 py-3 text-red-200">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <!-- Public teaser list: author + first 3 words; rest blurred with RANDOM placeholder of same length -->
+        <div class="w-full">
+          <h2 class="text-lg font-semibold mb-3">Club Hub is a place for people with similar interests who want to create or join exclusive communities! Join and become a member of unique community!</h2>
+          <h2 class="text-lg font-semibold mb-3">Recent activity within clubs</h2>
+
+          <% const teasers = Array.isArray(randomMessages) ? randomMessages : []; %>
+          <% if (teasers.length) { %>
+            <div class="flex max-h-[80vh] overflow-y-auto w-full">
+                <ol class="space-y-4 w-full">
+                  <% teasers.forEach(msg => {
+                       // 1) Get raw content and split into words
+                       const raw = (msg.message || '').toString().trim();
+                       const words = raw ? raw.split(/\s+/) : [];
+                       const first3 = words.slice(0, 3).join(' ');
+                       const rest = words.slice(3).join(' ');
+                       // 2) Build a random placeholder for "rest" that matches length, preserving spaces and punctuation.
+                       let maskedRest = '';
+                       if (rest) {
+                         const letters = 'abcdefghijklmnopqrstuvwxyz';
+                         for (let i = 0; i < rest.length; i++) {
+                           const ch = rest[i];
+                           if (/\s/.test(ch)) {
+                             // keep whitespace as-is
+                             maskedRest += ch;
+                           } else if (/[A-Za-z]/.test(ch)) {
+                             // replace letters with random letters
+                             maskedRest += letters[Math.floor(Math.random() * letters.length)];
+                           } else if (/[0-9]/.test(ch)) {
+                             // replace digits with random digits
+                             maskedRest += String(Math.floor(Math.random() * 10));
+                           } else {
+                             // keep punctuation and symbols (.,!?-:'"() etc.) to preserve shape
+                             maskedRest += ch;
+                           }
+                         }
+                       }
+                  %>
+                    <li class="rounded-xl border border-gray-700 bg-gray-900/50 p-4">
+                      <div class="flex text-sm font-semibold text-gray-200">
+                        <div class="flex w-full"><%= msg.name %></div>
+                      </div>
+                      <div class="mt-2 text-gray-100">
+                        <span class="align-middle"><%= first3 %></span>
+                        <% if (rest) { %>
+                          <span class="align-middle blur-sm select-none pointer-events-none" aria-hidden="true">
+                            &nbsp;<%= maskedRest %>
+                          </span>
+                        <% } %>
+                      </div>
+                    </li>
+                  <% }) %>
+                </ol>
+            </div>
+          <% } else { %>
+            <div class="rounded-xl border border-gray-700 bg-gray-900/40 p-4 text-sm text-gray-300">
+              No messages yet. Be the first to post after you sign up!
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right spacer -->
+    <div class="flex w-1/4"></div>
+  </div>
 </body>
 </html>

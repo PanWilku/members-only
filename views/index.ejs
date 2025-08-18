@@ -5,18 +5,20 @@
   <title><%= title %></title>
   <link href="/output.css" rel="stylesheet" />
 </head>
-<body class="flex bg-gray-900 text-white min-h-screen p-6 justify-center items-center max-w-dvw">
+<body class="flex w-full bg-gray-900 text-white min-h-screen p-6 justify-center items-center max-w-dvw">
   <div class="flex w-full gap-6">
     <!-- Left spacer (keep your 3-col feel) -->
-    <div class="flex w-1/4 pr-16"></div>
+    <div class="flex w-1/4 max-md:hidden pr-16"></div>
 
     <!-- Middle: centered card -->
-    <main class="flex w-1/2 flex-col items-center justify-start">
-      <div class="w-full bg-gray-800 rounded-2xl p-6 shadow-lg">
+    <div class="flex w-2/4 flex-col items-center justify-start">
+      <div class="flex flex-col w-full md:w-3/4 bg-gray-800 rounded-2xl p-6 shadow-lg">
         <!-- Header row -->
-        <div class="flex w-full mb-6 items-center">
-          <h1 class="text-2xl font-semibold">Welcome to <%= title %></h1>
-          <div class="flex w-full justify-end gap-3">
+        <div class="flex md:flex-col w-full mb-6 items-center">
+          <div class="flex w-full">
+              <h1 class="text-2xl font-semibold">Welcome to <%= title %></h1>
+          </div>
+          <div class="flex w-full justify-center gap-3">
             <a href="/log-in" class="rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 font-medium cursor-pointer">
               Log in
             </a>
@@ -93,9 +95,8 @@
           <% } %>
         </div>
       </div>
-    </main>
+    </div>
 
-    <!-- Right spacer -->
     <div class="flex w-1/4"></div>
   </div>
 </body>

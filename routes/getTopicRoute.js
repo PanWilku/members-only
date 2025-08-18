@@ -20,6 +20,19 @@ router.get('/:id/:topicId', async (req, res, next) => {
   'SELECT club_topic_messages.id, club_topic_messages.topic_id, club_topic_messages.author_id, club_topic_messages.message, club_topic_messages.created_at, club_topic_messages.updated_at, users.id AS user_id, users.first_name AS name FROM club_topic_messages JOIN users ON club_topic_messages.author_id = users.id WHERE club_topic_messages.topic_id = $1 ORDER BY club_topic_messages.created_at ASC',
   [topicId]
 );
+    const isMember = await db.query( //check if user is a member of the club
+        'SELECT 1 FROM club_memberships WHERE club_id = $1 AND user_id = $2',
+        [clubId, req.user.id]
+    );
+    const is_member = isMember.rowCount > 0;
+
+
+    if (!is_member){
+        return res.status(403).send('You must be a member of this club to view topics.');
+    }
+
+
+
     let messages = rows;
 
     for (const message of messages) {
@@ -46,11 +59,7 @@ router.get('/:id/:topicId', async (req, res, next) => {
     // get all messages for the topic
     const topicName = topicRows[0]?.title;
 
-    const isMember = await db.query( //check if user is a member of the club
-        'SELECT 1 FROM club_memberships WHERE club_id = $1 AND user_id = $2',
-        [clubId, req.user.id]
-    );
-    const is_member = isMember.rowCount > 0;
+
 
     res.render('topic', { user: req.user, clubId, topicId, messages, topicName,
         error: null, is_member, isAdmin, isAuthor });
